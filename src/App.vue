@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Header />
+    <Header :numCorrect="numCorrect" :numTotal="numTotal" />
 
     <b-container class="bv-example-row">
       <b-row>
@@ -30,7 +30,9 @@ export default {
   data() {
     return {
       questions : [],
-      index: 0
+      index: 0,
+      numCorrect:0,
+      numTotal :0
     }
   },
   methods: {
@@ -38,7 +40,10 @@ export default {
       this.index++
     },
     increment(isCorrect) {
-      
+      if(isCorrect) {
+        this.numCorrect++
+      }
+      this.numTotal++
     }
   },
   mounted: function() {

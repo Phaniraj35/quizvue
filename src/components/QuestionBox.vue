@@ -11,7 +11,7 @@
 
 
 		    <b-list-group>
-			  <b-list-group-item v-for="(answer,index) in answers" :key="index" @click="selectAnswer(index)" :class="[selectedAnswer === index ? 'selected' : '']">
+			  <b-list-group-item v-for="(answer,index) in answers" :key="index" @click="selectAnswer(index)" :class="[!answered && selectedAnswer === index ? 'selected' : answered && correctIndex === index ? 'correct' : answered && selectedAnswer===index && correctIndex !== index ? 'incorrect' : '']">
 			 {{answer}}</b-list-group-item>
 			  
 			</b-list-group>
@@ -19,7 +19,7 @@
 
 		    
 
-		    <b-button variant="primary" @click="submitAnswer">Submit</b-button>
+		    <b-button variant="primary" @click="submitAnswer" :disabled="this.selectedAnswer===null || answered" >Submit</b-button>
 		    <b-button @click.prevent="next" variant="success">Next</b-button>
 	  </b-jumbotron>
 	</div>
@@ -41,7 +41,9 @@ import _ from "lodash"
 		data() {
 			return {
 				selectedAnswer : null,
-				shuffledAnswers:[]
+				shuffledAnswers:[],
+				correctIndex:null,
+				answered: false
 			}
 		},
 
@@ -50,6 +52,7 @@ import _ from "lodash"
 				immediate:true,
 				handler() {
 					this.selectedAnswer = null
+					this.answered = false
 					this.shuffleAnswers()
 				}
 			}
@@ -63,12 +66,14 @@ import _ from "lodash"
 			shuffleAnswers() {
 				let answers = [...this.question.incorrect_answers,this.question.correct_answer]
 				this.shuffledAnswers = _.shuffle(answers)
+				this.correctIndex = this.shuffledAnswers.indexOf(this.question.correct_answer)
 			},
 			submitAnswer() {
 				let isCorrect = false
 				if(this.selectedAnswer === this.correctIndex) {
 					isCorrect = true
 				}
+				this.answered = true
 				this.increment(isCorrect)
 			}
 		},
