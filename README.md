@@ -1,4 +1,4 @@
-# first
+# QuizVue - A simple trivia quiz app built with VueJS.
 
 ## Project setup
 ```
